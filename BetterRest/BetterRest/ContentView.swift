@@ -20,24 +20,28 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack{
-            VStack{
-                Text("When do you want to wake up?")
-                    .font(.headline)
+            
+            Form {
+                Section("When do you want to wake up?") {
+                    DatePicker("Please enter a time", selection: $wakeUp, displayedComponents:.hourAndMinute)
+                    // .labelsHidden()
+                }
                 
-                DatePicker("Please enter a time", selection: $wakeUp, displayedComponents:.hourAndMinute).labelsHidden()
+                Section("Desired amount of sleep") {
+                    Stepper("\(sleepAmount.formatted()) hours: ", value: $sleepAmount, in: 4...12, step: 0.25)
+                }
                 
-                Text("Desired amount of sleep")
-                    .font(.headline)
-                
-                Stepper("\(sleepAmount.formatted()) hours: ", value: $sleepAmount, in: 4...12, step: 0.25)
-                
-                Text("Daily cup of coffee")
-                    .font(.headline)
-                
-                Stepper("\(coffeAmount.formatted()) cup(s): ", value: $coffeAmount, in: 1...20)
-                
-            }.navigationTitle("BetterRest")
-            //.padding()
+                Section("Daily cup of coffee") {
+                    Picker("Select the number of cups:",selection: $coffeAmount) {
+                        ForEach(8..<13) { number in
+                            Text("\(number)").tag(number)
+                        }
+                    }
+                    .pickerStyle(WheelPickerStyle())
+                    //.labelsHidden()
+                }
+            }
+            .navigationTitle("BetterRest")
             .toolbar {
                 Button("Calculate", action: calculateBedTime)
             }
@@ -46,6 +50,34 @@ struct ContentView: View {
             } message: {
                 Text(alertMessage)
             }
+            
+//            VStack{
+//                Text("When do you want to wake up?")
+//                    .font(.headline)
+//                
+//                DatePicker("Please enter a time", selection: $wakeUp, displayedComponents:.hourAndMinute).labelsHidden()
+//                
+//                Text("Desired amount of sleep")
+//                    .font(.headline)
+//                
+//                Stepper("\(sleepAmount.formatted()) hours: ", value: $sleepAmount, in: 4...12, step: 0.25)
+//                
+//                Text("Daily cup of coffee")
+//                    .font(.headline)
+//                
+//                Stepper("\(coffeAmount.formatted()) cup(s): ", value: $coffeAmount, in: 1...20)
+//                
+//            }.navigationTitle("BetterRest")
+//            //.padding()
+//            .toolbar {
+//                Button("Calculate", action: calculateBedTime)
+//            }
+//            .alert(alertTitle, isPresented: $showingAlert) {
+//                Button("OK") {}
+//            } message: {
+//                Text(alertMessage)
+//            }
+            
         }
     }
     
